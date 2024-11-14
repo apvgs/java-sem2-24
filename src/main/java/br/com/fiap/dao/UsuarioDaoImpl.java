@@ -51,10 +51,12 @@ final class UsuarioDaoImpl implements UsuarioDao {
         }
     }
 
+
+
     @Override
-    public Usuario buscarPorLoginId(Connection connection, int loginId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public Usuario buscarPorLoginId(Connection connection, Long loginId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-            select usuario.*, login.email, login.senha, login.id as login_id from T_GS_USUARIO usuario
+            select usuario.*, login.* from T_GS_USUARIO usuario
             join T_GS_LOGIN login on usuario.login_id = login.login_id
             where usuario.login_id = ?
         """;
@@ -63,22 +65,11 @@ final class UsuarioDaoImpl implements UsuarioDao {
             ps.setLong(1, loginId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return instaciaUsuario(rs);
+                    return InstanciaObjetos.instanciaUsuario(rs);
                 }
             }
         }
         return null;
     }
 
-    private Login instaciaLogin(ResultSet rs) throws SQLException, ErroAoCriarLogin {
-        Login login = new Login(rs.getString("email"), rs.getString("senha"));
-        login.setId(rs.getLong("login_id"));
-        return login;
-    }
-
-    private Usuario instaciaUsuario(ResultSet rs) throws SQLException, ErroAoCriarLogin, CpfInvalido {
-        Usuario usuario = new Usuario(rs.getString("cpf"), rs.getString("nome"), instaciaLogin(rs));
-        usuario.setId(rs.getLong("id"));
-        return usuario;
-    }
 }

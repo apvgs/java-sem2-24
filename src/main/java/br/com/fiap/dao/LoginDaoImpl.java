@@ -63,11 +63,7 @@ final class LoginDaoImpl implements LoginDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Long loginId = rs.getLong(1);
-                    String senha = rs.getString(2);
-                    Login login = new Login(email, senha);
-                    login.setId(loginId);
-                    return Optional.of(login);
+                    return Optional.of(InstanciaObjetos.instanciaLogin(rs));
                 } else {
                     throw new LoginNotFound();
                 }
