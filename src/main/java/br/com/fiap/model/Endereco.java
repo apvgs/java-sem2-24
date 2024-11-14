@@ -16,11 +16,12 @@ public class Endereco {
     private String estado;
     private String cep;
     private Integer numero;
+    private String apelido;
 
     public Endereco() {
     }
 
-    public Endereco(String cep, int numero, Usuario usuario) throws CepInvalido {
+    public Endereco(String cep, int numero, Usuario usuario, String apelido) throws CepInvalido {
         cep = verificaCep(cep);
         Endereco endereco = PegaEnderecoViaApi.buscarEndereco(cep);
         this.numero = numero;
@@ -29,6 +30,7 @@ public class Endereco {
         this.estado = endereco.estado;
         this.rua = endereco.rua;
         this.usuario = usuario;
+        this.apelido = apelido;
     }
 
     private String verificaCep(String cep) throws CepInvalido {
@@ -101,6 +103,14 @@ public class Endereco {
 
     public void setNumero(Integer numero) {
         this.numero = numero;
+    }
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
     }
 }
 
