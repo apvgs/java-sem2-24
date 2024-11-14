@@ -12,6 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 final class LoginServiceImpl implements LoginService {
 
@@ -32,9 +33,9 @@ final class LoginServiceImpl implements LoginService {
     @Override
     public Login logarUsuario(String email, String senha) throws SQLException, LoginInvalido, LoginNotFound, ErroAoCriarLogin {
         try (Connection connection = DatabaseConnectionFactory.getConnection()){
-            Login usuario = dao.findByEmail(connection, email).orElseThrow(LoginNotFound::new);
-            if (BCrypt.checkpw(senha, usuario.getSenha()))
-                return usuario;
+            Optional<Login> usuario = dao.findByEmail(connection, email);
+            if (usuario.isPresent() && BCrypt.checkpw(senha, usuario.get().getSenha()))
+                return usuario.get();
             throw new LoginInvalido("Login ou senha inválidos. Verifique suas credênciais.");
         }
     }
