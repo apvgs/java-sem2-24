@@ -2,12 +2,14 @@ package br.com.fiap.dao;
 
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
+import br.com.fiap.model.ConsumoDiario;
 import br.com.fiap.model.Endereco;
 import br.com.fiap.model.Login;
 import br.com.fiap.model.Usuario;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 
 final class InstanciaObjetos {
 
@@ -39,5 +41,14 @@ final class InstanciaObjetos {
         endereco.setRua(rs.getString("rua"));
         endereco.setNumero(rs.getInt("numero"));
         return endereco;
+    }
+
+    public static ConsumoDiario instanciaConsumoDiario(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
+        ConsumoDiario consumoDiario = new ConsumoDiario();
+        consumoDiario.setId(rs.getLong("id_consumo"));
+        consumoDiario.setDate(rs.getDate("data").toLocalDate());
+        consumoDiario.setConsumoDiario(rs.getDouble("consumo_diario"));
+        consumoDiario.setEndereco(instanciaEndereco(rs));
+        return consumoDiario;
     }
 }
