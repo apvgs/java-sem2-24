@@ -41,10 +41,11 @@ public class EnderecoDaoImpl implements EnderecoDao {
     @Override
     public Endereco getEndereco(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-        select e.*, usuario.*
-        from T_PS_ENDERECO e
-        join T_PS_USUARIO usuario on usuario.id = e.usuario_id
-        where e.id = ?
+            select e.*, usuario.*, login.*
+            from T_GS_ENDERECO e
+            join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
+            join T_GS_LOGIN login on login.id_login = usuario.login_id
+            where e.id = ?
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -61,10 +62,11 @@ public class EnderecoDaoImpl implements EnderecoDao {
     @Override
     public List<Endereco> getEnderecosByUsuaroId(Connection connection, Long userId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-            select e.*, usuario.*
-            from T_PS_ENDERECO e
-            join T_PS_USUARIO usuario on usuario.id = e.usuario_id
-            where e.id = ?
+            select e.*, usuario.*, login.*
+            from T_GS_ENDERECO e
+            join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
+            join T_GS_LOGIN login on login.id_login = usuario.login_id
+            where usuario.id_usuario = ?
         """;
         List<Endereco> enderecos = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
