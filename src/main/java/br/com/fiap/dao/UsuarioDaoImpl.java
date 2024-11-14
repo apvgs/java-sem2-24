@@ -20,7 +20,7 @@ final class UsuarioDaoImpl implements UsuarioDao {
                 values (?, ?, ?)
             """;
 
-        try(PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"})) {
+        try(PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id_usuario"})) {
             ps.setLong(1, usuario.getLogin().getId());
             ps.setString(2, usuario.getCpf());
             ps.setString(3, usuario.getNome());

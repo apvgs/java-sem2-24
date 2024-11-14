@@ -19,7 +19,7 @@ final class LoginDaoImpl implements LoginDao {
             values (?, ?)
         """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"})) {
+        try (PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id_login"})) {
             ps.setString(1, login.getEmail());
             ps.setString(2, login.getSenha());
 
