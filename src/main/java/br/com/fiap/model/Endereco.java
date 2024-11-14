@@ -1,14 +1,18 @@
 package br.com.fiap.model;
 
 import br.com.fiap.exception.CepInvalido;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Endereco {
 
     private Long id;
     private Usuario usuario;
+    @JsonProperty("logradouro")
     private String rua;
     private String bairro;
+    @JsonProperty("localidade")
     private String cidade;
+    @JsonProperty("uf")
     private String estado;
     private String cep;
     private Integer numero;
