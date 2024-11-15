@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnderecoDaoImpl implements EnderecoDao {
+final class EnderecoDaoImpl implements EnderecoDao {
 
     @Override
     public void cadastrar(Connection connection, Endereco endereco) throws SQLException {

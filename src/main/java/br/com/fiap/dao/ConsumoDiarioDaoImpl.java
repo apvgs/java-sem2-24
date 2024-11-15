@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-final class ConsumoDiarioImpl implements ConsumoDiarioDao{
+final class ConsumoDiarioDaoImpl implements ConsumoDiarioDao{
 
     @Override
     public void cadastrarConsumoDiario(Connection connection, ConsumoDiario consumoDiario) throws SQLException {
@@ -33,7 +33,7 @@ final class ConsumoDiarioImpl implements ConsumoDiarioDao{
     @Override
     public ConsumoDiario buscarConsumoDiariobyId(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-                select c.*, e.* usuario.* from T_GS_CONSUMO_DIARIO c
+                select c.*, e.* usuario.*, login.*, from T_GS_CONSUMO_DIARIO c
                 join T_GS_ENDERECO e on (e.id_endereco = c.endereco_id)
                 join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
@@ -53,7 +53,7 @@ final class ConsumoDiarioImpl implements ConsumoDiarioDao{
     @Override
     public List<ConsumoDiario> buscarConsumoDiarioByEnderecoId(Connection connection, Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-                select c.*, e.* usuario.* from T_GS_CONSUMO_DIARIO c
+                select c.*, e.* usuario.*, login.* from T_GS_CONSUMO_DIARIO c
                 join T_GS_ENDERECO e on (e.id_endereco = c.endereco_id)
                 join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id

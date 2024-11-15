@@ -1,13 +1,13 @@
 package br.com.fiap.dao;
 
-public final class ConsumoDiarioFactory {
+public final class ConsumoDiarioDaoFactory {
 
-    private ConsumoDiarioFactory() {
+    private ConsumoDiarioDaoFactory() {
         throw new UnsupportedOperationException("Essa classe não deve ser instanciada");
     }
 
     public static ConsumoDiarioDao getConsumoDiarioDao() {
-        return new ConsumoDiarioImpl();
+        return new ConsumoDiarioDaoImpl();
     }
 }
 
