@@ -22,6 +22,7 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.Map;
 
+@Path("user")
 public class UsuarioController {
 
     private UsuarioService usuarioService = UsuarioServiceFactory.create();
@@ -47,4 +48,6 @@ public class UsuarioController {
             return Response.status(Response.Status.CONFLICT).entity(Map.of("error", e.getMessage())).build();
         }
     }
+
+
 }
