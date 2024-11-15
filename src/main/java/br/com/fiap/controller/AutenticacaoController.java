@@ -24,7 +24,7 @@ public class AutenticacaoController {
     private final LoginService loginService = LoginServiceFactory.create();
 
     @POST
-    @Path("/login")
+    @Path("/auth/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginDto dto) {
