@@ -2,14 +2,10 @@ package br.com.fiap.dao;
 
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
-import br.com.fiap.model.ConsumoDiario;
-import br.com.fiap.model.Endereco;
-import br.com.fiap.model.Login;
-import br.com.fiap.model.Usuario;
+import br.com.fiap.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 
 final class InstanciaObjetos {
 
@@ -50,5 +46,20 @@ final class InstanciaObjetos {
         consumoDiario.setConsumoDiario(rs.getDouble("consumo_diario"));
         consumoDiario.setEndereco(instanciaEndereco(rs));
         return consumoDiario;
+    }
+
+    public static DispositivoMedicao instanciaDispositivoMedicao(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
+        DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(rs.getString("nome"), rs.getString("localizacao"), instanciaEndereco(rs));
+        dispositivoMedicao.setId(rs.getLong("id_dispositivo"));
+        return dispositivoMedicao;
+    }
+
+    public static LeituraEnergia instanciaLeitura(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
+        LeituraEnergia leituraEnergia = new LeituraEnergia();
+        leituraEnergia.setId(rs.getLong("id_leitura"));
+        leituraEnergia.setConsumo(rs.getDouble("consumo"));
+        leituraEnergia.setDataMedicao(rs.getTimestamp("dt_medicao").toLocalDateTime());
+        leituraEnergia.setDispositivoMedicao(instanciaDispositivoMedicao(rs));
+        return leituraEnergia;
     }
 }
