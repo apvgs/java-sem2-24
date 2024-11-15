@@ -62,4 +62,11 @@ final class InstanciaObjetos {
         leituraEnergia.setDispositivoMedicao(instanciaDispositivoMedicao(rs));
         return leituraEnergia;
     }
+
+    public static Notificacao instanciaNotificacao(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
+        Notificacao notificacao = new Notificacao(rs.getString("mensagem"), instanciaLeitura(rs));
+        notificacao.setId(rs.getLong("id_notificacao"));
+        notificacao.setDataCriacao(rs.getTimestamp("data").toLocalDateTime());
+        return notificacao;
+    }
 }
