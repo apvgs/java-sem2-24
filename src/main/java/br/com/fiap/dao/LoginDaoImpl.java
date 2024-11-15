@@ -38,8 +38,8 @@ final class LoginDaoImpl implements LoginDao {
     public void alterar(Connection connection, Login login) throws SQLException, LoginNotFound {
         String sql = """
             update T_GS_LOGIN
-            set sq_senha = ?
-            where id = ?
+            set senha = ?
+            where id_login = ?
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
