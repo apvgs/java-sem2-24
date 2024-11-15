@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-class TokenServiceImpl implements TokenService {
+final class TokenServiceImpl implements TokenService {
 
     private final String secret = "89367347c8f76a9195544a11a28b34325742028983394c8918996dc5ea899b23";
 
