@@ -61,11 +61,11 @@ final class DispositivoMedicaoDaoImpl implements DispositivoMedicaoDao {
     @Override
     public DispositivoMedicao buscar(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-               select d.*, e.* usuario.*, login.* from T_GS_DISPOSITIVO_MEDICAO d
+               select d.*, e.*, usuario.*, login.* from T_GS_DISPOSITIVO_MEDICAO d
                 join T_GS_ENDERECO e on (e.id_endereco = d.endereco_id)
                 join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
-                where endereco_id = ?
+                where d.id_dispositivo = ?
                """;
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, id);
