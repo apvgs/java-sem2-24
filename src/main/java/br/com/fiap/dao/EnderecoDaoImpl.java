@@ -20,12 +20,12 @@ final class EnderecoDaoImpl implements EnderecoDao {
             values (?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql, new String[]{"cd_endereco"})) {
+        try (PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id_endereco"})) {
             ps.setLong(1, endereco.getUsuario().getId());
             ps.setString(2, endereco.getRua());
             ps.setString(3, endereco.getCidade());
             ps.setString(4, endereco.getEstado());
-            ps.setString(5, endereco.getBairro());
+            ps.setString(5, endereco.getBairro());;
             ps.setString(6, endereco.getCep());
             ps.setInt( 7, endereco.getNumero());
             ps.setString(8, endereco.getApelido());
@@ -45,7 +45,7 @@ final class EnderecoDaoImpl implements EnderecoDao {
             from T_GS_ENDERECO e
             join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
             join T_GS_LOGIN login on login.id_login = usuario.login_id
-            where e.id = ?
+            where e.id_endereco = ?
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
