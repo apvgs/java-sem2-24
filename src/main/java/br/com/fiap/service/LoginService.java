@@ -15,4 +15,6 @@ public interface LoginService {
 
     Login logarUsuario(String email, String senha) throws SQLException, LoginInvalido, LoginNotFound, ErroAoCriarLogin;
 
+    Login findByEmail(String email) throws SQLException, ErroAoCriarLogin, LoginNotFound;
+
 }
