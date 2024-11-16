@@ -51,13 +51,11 @@ final class UsuarioDaoImpl implements UsuarioDao {
         }
     }
 
-
-
     @Override
     public Usuario buscarPorLoginId(Connection connection, Long loginId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
             select usuario.*, login.* from T_GS_USUARIO usuario
-            join T_GS_LOGIN login on usuario.login_id = login.login_id
+            join T_GS_LOGIN login on usuario.login_id = login.id_login
             where usuario.login_id = ?
         """;
 
