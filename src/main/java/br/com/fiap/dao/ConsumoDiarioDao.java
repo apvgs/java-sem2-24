@@ -1,18 +1,22 @@
 package br.com.fiap.dao;
 
+import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.ConsumoDiario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ConsumoDiarioDao {
 
     void cadastrarConsumoDiario(Connection connection, ConsumoDiario consumoDiario) throws SQLException;
 
-    ConsumoDiario buscarConsumoDiariobyId(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido;
+    ConsumoDiario buscarConsumoDiario(Connection connection, Long idUsuario, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
     List<ConsumoDiario> buscarConsumoDiarioByEnderecoId(Connection connection, Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
+
+    void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound;
 }

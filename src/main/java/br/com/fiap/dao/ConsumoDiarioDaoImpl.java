@@ -1,10 +1,12 @@
 package br.com.fiap.dao;
 
+import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.ConsumoDiario;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,16 +33,17 @@ final class ConsumoDiarioDaoImpl implements ConsumoDiarioDao{
     }
 
     @Override
-    public ConsumoDiario buscarConsumoDiariobyId(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public ConsumoDiario buscarConsumoDiario(Connection connection, Long idUsuario, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-                select c.*, e.* usuario.*, login.*, from T_GS_CONSUMO_DIARIO c
+                select c.*, e.*, usuario.*, login.* from T_GS_CONSUMO_DIARIO c
                 join T_GS_ENDERECO e on (e.id_endereco = c.endereco_id)
                 join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
-                where id_consumo = ?
+                where usuario.id_usuario = ? and c.data = ?
                 """;
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, idUsuario);
+            ps.setDate(2, Date.valueOf(data));
             try(ResultSet rs = ps.executeQuery()) {
                 if (rs.next()){
                     return InstanciaObjetos.instanciaConsumoDiario(rs);
@@ -69,5 +72,22 @@ final class ConsumoDiarioDaoImpl implements ConsumoDiarioDao{
             }
         }
         return lista;
+    }
+
+    @Override
+    public void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound {
+        String sql = """
+                update T_GS_CONSUMO_DIARIO set consumo_diario = ? where id_consumo = ?
+                """;
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, consumoDiario.getConsumoDiario());
+            ps.setLong(2, consumoDiario.getId());
+            int rowsAffected = ps.executeUpdate();
+            if(rowsAffected != 1){
+                throw new ConsumoNotFound();
+            }
+
+        }
+
     }
 }
