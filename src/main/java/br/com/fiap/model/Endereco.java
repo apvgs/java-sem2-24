@@ -1,11 +1,16 @@
 package br.com.fiap.model;
 
 import br.com.fiap.exception.CepInvalido;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Endereco {
 
+    @JsonIgnore
     private Long id;
+    @JsonIgnore
     private Usuario usuario;
     @JsonProperty("logradouro")
     private String rua;
@@ -15,7 +20,9 @@ public class Endereco {
     @JsonProperty("uf")
     private String estado;
     private String cep;
+    @JsonIgnore
     private Integer numero;
+    @JsonIgnore
     private String apelido;
 
     public Endereco() {
@@ -24,6 +31,7 @@ public class Endereco {
     public Endereco(String cep, int numero, Usuario usuario, String apelido) throws CepInvalido {
         cep = verificaCep(cep);
         Endereco endereco = PegaEnderecoViaApi.buscarEndereco(cep);
+        this.cep = cep;
         this.numero = numero;
         this.bairro = endereco.bairro;
         this.cidade = endereco.cidade;
