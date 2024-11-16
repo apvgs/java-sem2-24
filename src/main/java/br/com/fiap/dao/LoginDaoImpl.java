@@ -56,7 +56,7 @@ final class LoginDaoImpl implements LoginDao {
     @Override
     public Optional<Login> findByEmail(Connection connection, String email) throws SQLException, ErroAoCriarLogin, LoginNotFound {
         String sql = """
-            select * from T_PS_LOGIN where email = ?
+            select * from T_GS_LOGIN where email = ?
         """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, email);
