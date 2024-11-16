@@ -28,7 +28,7 @@ public class Login {
     }
 
     public void setEmail(String email) throws ErroAoCriarLogin {
-        if(email.isBlank() || (email.contains("@") && email.contains(".com"))){
+        if(email.isBlank() || !(email.contains("@") && email.contains(".com"))){
             throw new ErroAoCriarLogin("Email invalido");
         }
         this.email = email;
