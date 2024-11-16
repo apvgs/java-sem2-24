@@ -3,15 +3,14 @@ package br.com.fiap.service;
 import br.com.fiap.config.DatabaseConnectionFactory;
 import br.com.fiap.dao.ConsumoDiarioDao;
 import br.com.fiap.dao.ConsumoDiarioDaoFactory;
-import br.com.fiap.dao.DispositivoMedicaoDao;
-import br.com.fiap.dao.DispositivoMedicaoDaoFactory;
+import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.ConsumoDiario;
-import br.com.fiap.model.DispositivoMedicao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
@@ -31,9 +30,14 @@ final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
     }
 
     @Override
-    public ConsumoDiario buscarPorId(Long idDispositivoMedicao) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public ConsumoDiario buscarPorId(Long idUsuario, LocalDate date) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         try(Connection connection = DatabaseConnectionFactory.getConnection()) {
-            return consumoDiarioDao.buscarConsumoDiariobyId(connection, idDispositivoMedicao);
+            return consumoDiarioDao.buscarConsumoDiario(connection, idUsuario, date);
         }
+    }
+
+    @Override
+    public void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound {
+        consumoDiarioDao.alterar(connection, consumoDiario);
     }
 }
