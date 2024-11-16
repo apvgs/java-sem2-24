@@ -2,18 +2,17 @@ package br.com.fiap.controller;
 
 
 import br.com.fiap.dto.CadastroUsuarioDto;
-import br.com.fiap.exception.CpfInvalido;
-import br.com.fiap.exception.EmailJaExistente;
-import br.com.fiap.exception.ErroAoCriarLogin;
+import br.com.fiap.dto.DashBoardDto;
+import br.com.fiap.dto.DispositivoDto;
+import br.com.fiap.exception.*;
+import br.com.fiap.model.DispositivoMedicao;
+import br.com.fiap.model.Endereco;
 import br.com.fiap.model.Login;
 import br.com.fiap.model.Usuario;
-import br.com.fiap.service.UsuarioService;
-import br.com.fiap.service.UsuarioServiceFactory;
+import br.com.fiap.security.CookieName;
+import br.com.fiap.service.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,6 +25,9 @@ import java.util.Map;
 public class UsuarioController {
 
     private UsuarioService usuarioService = UsuarioServiceFactory.create();
+    private TokenService tokenService = TokenServiceFactory.create();
+    private EnderecoService enderecoService = EnderecoServiceFactory.create();
+    private DispositivoMedicaoService dispositivoMedicaoService = DispositivoMedicaoServiceFactory.create();
     @Context
     private UriInfo uriInfo;
 
@@ -49,5 +51,38 @@ public class UsuarioController {
         }
     }
 
+    @GET
+    @Path("/dashboard")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response dashBoard(@CookieParam(CookieName.TOKEN) String token) {
+        try {
+            String email = tokenService.getSubject(token);
+            DashBoardDto dashboard = usuarioService.dashBoard(email);
+            return Response.ok().entity(dashboard).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("message", e.getMessage())).build();
+        } catch (ErroAoCriarLogin | CpfInvalido e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
+        } catch (LoginNotFound e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", "login não encontrado")).build();
+        }
+    }
+
+    @POST
+    @Path("add_dispositivo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addDispositivo(DispositivoDto dto){
+        try {
+            Endereco endereco = enderecoService.buscarEndereco(dto.enderecoId());
+            DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.nome(), dto.localizacao(), endereco);
+            dispositivoMedicaoService.cadastrar(dispositivoMedicao);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("message", e.getMessage())).build();
+        } catch (ErroAoCriarLogin | CpfInvalido | EnderecoNotFound e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
+        }
+    }
 
 }
