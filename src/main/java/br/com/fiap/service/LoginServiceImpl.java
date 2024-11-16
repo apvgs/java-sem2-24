@@ -39,4 +39,9 @@ final class LoginServiceImpl implements LoginService {
             throw new LoginInvalido("Login ou senha inválidos. Verifique suas credênciais.");
         }
     }
+
+    public Login findByEmail(String email) throws SQLException, ErroAoCriarLogin, LoginNotFound {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        return dao.findByEmail(connection, email).orElseThrow(LoginNotFound::new);
+    }
 }
