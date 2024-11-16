@@ -1,6 +1,7 @@
 package br.com.fiap.service;
 
 import br.com.fiap.exception.CpfInvalido;
+import br.com.fiap.exception.EnderecoNotFound;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.DispositivoMedicao;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface DispositivoMedicaoService {
 
-    void cadastrar(DispositivoMedicao dispositivoMedicao) throws SQLException;
+    void cadastrar(DispositivoMedicao dispositivoMedicao) throws SQLException, EnderecoNotFound;
 
     List<DispositivoMedicao> listar(Long idEndereco) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 

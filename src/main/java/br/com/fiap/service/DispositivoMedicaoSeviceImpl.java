@@ -4,6 +4,7 @@ import br.com.fiap.config.DatabaseConnectionFactory;
 import br.com.fiap.dao.DispositivoMedicaoDao;
 import br.com.fiap.dao.DispositivoMedicaoDaoFactory;
 import br.com.fiap.exception.CpfInvalido;
+import br.com.fiap.exception.EnderecoNotFound;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.DispositivoMedicao;
 
@@ -16,14 +17,17 @@ final class DispositivoMedicaoSeviceImpl implements DispositivoMedicaoService{
     private DispositivoMedicaoDao dispositivoMedicaoDao = DispositivoMedicaoDaoFactory.getDispositivoMedicaoDao();
 
     @Override
-    public void cadastrar(DispositivoMedicao dispositivoMedicao) throws SQLException {
+    public void cadastrar(DispositivoMedicao dispositivoMedicao) throws SQLException, EnderecoNotFound {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
+            if (dispositivoMedicao.getEndereco() == null){
+                throw new EnderecoNotFound("Endereco não encontrado com esse id");
+            }
             dispositivoMedicaoDao.inserir(connection, dispositivoMedicao);
             connection.commit();
         } catch (SQLException e) {
             connection.rollback();
-            throw e;
+            throw new SQLException(e.getMessage());
         } finally {
             connection.close();
         }
