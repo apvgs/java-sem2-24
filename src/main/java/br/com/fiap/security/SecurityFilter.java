@@ -36,7 +36,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     }
 
     private boolean isPublicPath(String path) {
-        return path.endsWith("usuario/cadastro") || path.equals("usuario/login");
+        return path.endsWith("user/auth/signup") || path.equals("auth/login");
     }
 
     private boolean isValidCookie(Cookie cookie) {
