@@ -36,7 +36,7 @@ final class LoginServiceImpl implements LoginService {
             Optional<Login> usuario = dao.findByEmail(connection, email);
             if (usuario.isPresent() && BCrypt.checkpw(senha, usuario.get().getSenha()))
                 return usuario.get();
-            throw new LoginInvalido("Login ou senha inválidos. Verifique suas credênciais.");
+            throw new LoginInvalido("Login ou password inválidos. Verifique suas credênciais.");
         }
     }
 
