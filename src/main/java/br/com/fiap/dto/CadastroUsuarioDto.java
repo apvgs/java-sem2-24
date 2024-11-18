@@ -2,7 +2,7 @@ package br.com.fiap.dto;
 
 public record CadastroUsuarioDto(
         String email,
-        String senha,
+        String password,
         String cpf,
         String nome
 ) {
