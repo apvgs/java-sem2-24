@@ -1,6 +1,7 @@
 package br.com.fiap.controller;
 
 import br.com.fiap.dto.EnderecoDto;
+import br.com.fiap.dto.EnderecoResponseDto;
 import br.com.fiap.exception.CepInvalido;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
@@ -33,8 +34,11 @@ public class EnderecoController {
             String email = tokenService.getSubject(token);
             Usuario usuario = usuarioService.buscarUsuario(email);
             Endereco endereco = new Endereco(dto.cep(), dto.numero(), usuario, dto.apelido());
+            endereco.setUsuario(usuario);
             enderecoService.cadastrarEndereco(endereco);
-            return Response.status(Response.Status.CREATED).build();
+            return Response.status(Response.Status.CREATED).entity(new EnderecoResponseDto(
+                    endereco.getId(), endereco.getUsuario().getId(), endereco.getRua(), endereco.getCep(), endereco.getNumero(), endereco.getRua(), endereco.getEstado()))
+                    .build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (ErroAoCriarLogin | CepInvalido | CpfInvalido e) {

@@ -3,6 +3,7 @@ package br.com.fiap.controller;
 
 import br.com.fiap.dto.CadastroUsuarioDto;
 import br.com.fiap.dto.DashBoardDto;
+import br.com.fiap.dto.DispoitivoRequestDto;
 import br.com.fiap.dto.DispositivoDto;
 import br.com.fiap.exception.*;
 import br.com.fiap.model.DispositivoMedicao;
@@ -37,13 +38,13 @@ public class UsuarioController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response cadastrarUsuario(CadastroUsuarioDto dto) {
         try {
-            Login login = new Login(dto.email(), dto.senha());
+            Login login = new Login(dto.email(), dto.password());
             Usuario usuario = new Usuario(dto.cpf(), dto.nome(), login);
             usuarioService.cadastrarUsuario(usuario);
             URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(usuario.getId())).build();
             return Response.created(uri).entity(dto).build();
         } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("message", e.getMessage())).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (ErroAoCriarLogin | CpfInvalido e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
         } catch (EmailJaExistente e) {
@@ -57,14 +58,15 @@ public class UsuarioController {
     public Response dashBoard(@CookieParam(CookieName.TOKEN) String token) {
         try {
             String email = tokenService.getSubject(token);
+            System.out.println(email);
             DashBoardDto dashboard = usuarioService.dashBoard(email);
             return Response.ok().entity(dashboard).build();
         } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("message", e.getMessage())).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (ErroAoCriarLogin | CpfInvalido e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
         } catch (LoginNotFound e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", "login não encontrado")).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("error", "login não encontrado")).build();
         }
     }
 
@@ -77,9 +79,11 @@ public class UsuarioController {
             Endereco endereco = enderecoService.buscarEndereco(dto.enderecoId());
             DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.nome(), dto.localizacao(), endereco);
             dispositivoMedicaoService.cadastrar(dispositivoMedicao);
-            return Response.status(Response.Status.CREATED).build();
+            return Response.status(Response.Status.CREATED).entity(
+                    new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getEndereco().getApelido()))
+                    .build();
         } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("message", e.getMessage())).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (ErroAoCriarLogin | CpfInvalido | EnderecoNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
         }
