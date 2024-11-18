@@ -58,13 +58,6 @@ final class LeituraEnergiaServiceImpl implements LeituraEnergiaService {
     }
 
     @Override
-    public List<LeituraEnergia> listar(Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
-        try(Connection connection = DatabaseConnectionFactory.getConnection()) {
-            return leituraEnergiaDao.listar(connection, enderecoId);
-        }
-    }
-
-    @Override
     public List<LeituraEnergia> listar(Long usuarioId, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         try(Connection connection = DatabaseConnectionFactory.getConnection()) {
             return leituraEnergiaDao.listar(connection, usuarioId, data);

@@ -54,17 +54,17 @@ final class ConsumoDiarioDaoImpl implements ConsumoDiarioDao{
     }
 
     @Override
-    public List<ConsumoDiario> buscarConsumoDiarioByEnderecoId(Connection connection, Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public List<ConsumoDiario> buscarConsumoDiarioByUsuarioId(Connection connection, Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
                 select c.*, e.* usuario.*, login.* from T_GS_CONSUMO_DIARIO c
                 join T_GS_ENDERECO e on (e.id_endereco = c.endereco_id)
                 join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
-                where e.id_endereco = ?
+                where usuario.id_usuario = ?
                 """;
         List<ConsumoDiario> lista = new ArrayList<>();
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, enderecoId);
+            ps.setLong(1, usuarioId);
             try(ResultSet rs = ps.executeQuery()) {
                 while (rs.next()){
                     lista.add(InstanciaObjetos.instanciaConsumoDiario(rs));

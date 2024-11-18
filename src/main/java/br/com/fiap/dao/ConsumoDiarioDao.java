@@ -16,7 +16,7 @@ public interface ConsumoDiarioDao {
 
     ConsumoDiario buscarConsumoDiario(Connection connection, Long idUsuario, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
-    List<ConsumoDiario> buscarConsumoDiarioByEnderecoId(Connection connection, Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
+    List<ConsumoDiario> buscarConsumoDiarioByUsuarioId(Connection connection, Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
     void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound;
 }

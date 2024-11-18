@@ -12,7 +12,5 @@ public interface DispositivoMedicaoDao {
 
     void inserir(Connection connection, DispositivoMedicao dispositivoMedicao) throws SQLException;
 
-    List<DispositivoMedicao> listar(Connection connection, Long enderecoId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
-
     DispositivoMedicao buscar(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 }

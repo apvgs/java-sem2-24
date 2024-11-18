@@ -23,9 +23,9 @@ final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
     }
 
     @Override
-    public List<ConsumoDiario> listar(Long idEndereco) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public List<ConsumoDiario> listar(Long idUsuario) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         try(Connection connection = DatabaseConnectionFactory.getConnection()) {
-            return consumoDiarioDao.buscarConsumoDiarioByEnderecoId(connection, idEndereco);
+            return consumoDiarioDao.buscarConsumoDiarioByUsuarioId(connection, idUsuario);
         }
     }
 

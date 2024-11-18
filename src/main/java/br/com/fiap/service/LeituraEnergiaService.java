@@ -15,7 +15,5 @@ public interface LeituraEnergiaService {
 
     LeituraEnergia buscar(Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
-    List<LeituraEnergia> listar(Long leituraEnergiaId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
-
     List<LeituraEnergia> listar(Long usuarioId, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 }

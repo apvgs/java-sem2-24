@@ -15,7 +15,7 @@ public interface ConsumoDiarioService {
 
     void cadastrar(Connection connection, ConsumoDiario consumoDiario) throws SQLException;
 
-    List<ConsumoDiario> listar(Long idEndereco) throws SQLException, ErroAoCriarLogin, CpfInvalido;
+    List<ConsumoDiario> listar(Long idUsuario) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
     ConsumoDiario buscarPorId(Long idUsuario, LocalDate date) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 

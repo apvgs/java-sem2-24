@@ -33,12 +33,6 @@ final class DispositivoMedicaoSeviceImpl implements DispositivoMedicaoService{
         }
     }
 
-    @Override
-    public List<DispositivoMedicao> listar(Long idEndereco) throws SQLException, ErroAoCriarLogin, CpfInvalido {
-        try(Connection connection = DatabaseConnectionFactory.getConnection()) {
-            return dispositivoMedicaoDao.listar(connection, idEndereco);
-        }
-    }
 
     @Override
     public DispositivoMedicao buscarPorId(Long idDispositivoMedicao) throws SQLException, ErroAoCriarLogin, CpfInvalido {
