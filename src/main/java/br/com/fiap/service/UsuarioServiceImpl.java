@@ -75,8 +75,8 @@ final class UsuarioServiceImpl implements UsuarioService {
                 usuario.getCpf(),
                 login.getEmail(),
                 login.getSenha(),
-                consumoDiario.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                consumoDiario.getConsumoDiario(),
+                LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ,
+                consumoDiario == null ? 0 : consumoDiario.getConsumoDiario(),
                 leituraEnergias
                 );
     }
