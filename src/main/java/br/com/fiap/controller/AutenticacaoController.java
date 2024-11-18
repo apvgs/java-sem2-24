@@ -18,18 +18,19 @@ import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.Map;
 
+@Path("/auth")
 public class AutenticacaoController {
 
     private final TokenService tokenService = TokenServiceFactory.create();
     private final LoginService loginService = LoginServiceFactory.create();
 
     @POST
-    @Path("auth/login")
+    @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginDto dto) {
         try {
-            Login login = loginService.logarUsuario(dto.email(), dto.senha());
+            Login login = loginService.logarUsuario(dto.email(), dto.password());
             String token = tokenService.genToken(login);
             NewCookie cookie = new NewCookie(CookieName.TOKEN, token, "/", null, null, tokenService.expirationDate().getNano(), true, true);
             return Response.status(Response.Status.OK).entity(Map.of("token", token)).cookie(cookie).build();
