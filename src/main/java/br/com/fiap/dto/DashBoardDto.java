@@ -10,6 +10,9 @@ public record DashBoardDto(
         String senha,
         String data,
         Double consumoDiario,
-        List<LeituraEnergiaResponse> list
+        Double consumoMensal,
+        Double mediaDiaria,
+        List<LeituraEnergiaResponse> list,
+        boolean existeDispositivo
 ) {
 }

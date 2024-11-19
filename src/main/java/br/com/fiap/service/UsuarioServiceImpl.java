@@ -18,10 +18,12 @@ import java.util.List;
 
 final class UsuarioServiceImpl implements UsuarioService {
 
-    UsuarioDao usuarioDao = UsuarioDaoFactory.getUsuarioDao();
-    LoginService loginService = LoginServiceFactory.create();
-    ConsumoDiarioService consumoDiarioService = ConsumoDiarioServiceFactory.create();
-    LeituraEnergiaService leituraEnergiaService = LeituraEnergiaServiceFactory.create();
+    private UsuarioDao usuarioDao = UsuarioDaoFactory.getUsuarioDao();
+    private LoginService loginService = LoginServiceFactory.create();
+    private ConsumoDiarioService consumoDiarioService = ConsumoDiarioServiceFactory.create();
+    private LeituraEnergiaService leituraEnergiaService = LeituraEnergiaServiceFactory.create();
+    private DispositivoMedicaoService dispositivoMedicaoService = DispositivoMedicaoServiceFactory.create();
+
 
     @Override
     public void cadastrarUsuario(Usuario usuario) throws SQLException, ErroAoCriarLogin, EmailJaExistente {
@@ -70,6 +72,19 @@ final class UsuarioServiceImpl implements UsuarioService {
                         leituraEnergia.getConsumo(),
                         leituraEnergia.getDispositivoMedicao().getNome()))
                 .toList();
+        List<ConsumoDiario> consumoDiarios = consumoDiarioService.buscarConsumoDiarioByUsuarioIdEMes(usuario.getId());
+        double consumoMensal = 0;
+        for (ConsumoDiario consumo : consumoDiarios) {
+            consumoMensal += consumo.getConsumoDiario();
+        }
+        double mediaDiaria;
+        if(consumoDiarios.isEmpty()){
+            mediaDiaria = 0;
+        } else {
+            mediaDiaria = consumoMensal / consumoDiarios.size();
+        }
+        boolean temDispositivo = !dispositivoMedicaoService.buscarByUsuarioId(usuario.getId()).isEmpty();
+
         return new DashBoardDto(usuario.getNome(),
                 usuario.getId(),
                 usuario.getCpf(),
@@ -77,7 +92,10 @@ final class UsuarioServiceImpl implements UsuarioService {
                 login.getSenha(),
                 LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ,
                 consumoDiario == null ? 0 : consumoDiario.getConsumoDiario(),
-                leituraEnergias
+                consumoMensal,
+                mediaDiaria,
+                leituraEnergias,
+                temDispositivo
                 );
     }
 }
