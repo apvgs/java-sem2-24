@@ -4,6 +4,7 @@ import br.com.fiap.config.DatabaseConnectionFactory;
 import br.com.fiap.dao.DispositivoMedicaoDao;
 import br.com.fiap.dao.DispositivoMedicaoDaoFactory;
 import br.com.fiap.exception.CpfInvalido;
+import br.com.fiap.exception.DispositivoNotFound;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.exception.UsuarioNotFound;
 import br.com.fiap.model.DispositivoMedicao;
@@ -35,9 +36,13 @@ final class DispositivoMedicaoSeviceImpl implements DispositivoMedicaoService{
 
 
     @Override
-    public DispositivoMedicao buscarPorId(Long idDispositivoMedicao) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+    public DispositivoMedicao buscarPorId(Long idDispositivoMedicao) throws SQLException, ErroAoCriarLogin, CpfInvalido, DispositivoNotFound {
         try(Connection connection = DatabaseConnectionFactory.getConnection()) {
-            return dispositivoMedicaoDao.buscar(connection, idDispositivoMedicao);
+            DispositivoMedicao buscar = dispositivoMedicaoDao.buscar(connection, idDispositivoMedicao);
+            if (buscar == null){
+                throw new DispositivoNotFound("Dispositivo não encontrado");
+            }
+            return buscar;
         }
     }
 
@@ -45,6 +50,20 @@ final class DispositivoMedicaoSeviceImpl implements DispositivoMedicaoService{
     public List<DispositivoMedicao> buscarByUsuarioId(Long userId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         try(Connection connection = DatabaseConnectionFactory.getConnection()) {
             return dispositivoMedicaoDao.buscarByUsuarioId(connection, userId);
+        }
+    }
+
+    @Override
+    public void alterarDispositivo(String localizacao, Long id) throws SQLException, DispositivoNotFound {
+        try(Connection connection = DatabaseConnectionFactory.getConnection()) {
+            dispositivoMedicaoDao.alterarDispositivo(connection, localizacao, id);
+        }
+    }
+
+    @Override
+    public void excluirDispositivo(Long id) throws SQLException, DispositivoNotFound {
+        try(Connection connection = DatabaseConnectionFactory.getConnection()) {
+            dispositivoMedicaoDao.excluirDispositivo(connection, id);
         }
     }
 

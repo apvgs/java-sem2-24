@@ -1,8 +1,10 @@
 package br.com.fiap.dao;
 
 import br.com.fiap.exception.CpfInvalido;
+import br.com.fiap.exception.DispositivoNotFound;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.DispositivoMedicao;
+import br.com.fiap.model.StatusDispositvo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,5 +75,35 @@ final class DispositivoMedicaoDaoImpl implements DispositivoMedicaoDao {
 
         }
         return dispositivoMedicao;
+    }
+
+    @Override
+    public void alterarDispositivo(Connection connection, String localizacao, Long id) throws SQLException, DispositivoNotFound {
+        String sql = """
+               update T_GS_DISPOSITIVO_MEDICAO d set d.localizacao = ? where d.id_dispositivo = ?
+               """;
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, localizacao);
+            ps.setLong(2, id);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DispositivoNotFound("dispositivo não encontrado");
+            }
+        }
+    }
+
+    @Override
+    public void excluirDispositivo(Connection connection, Long id) throws SQLException, DispositivoNotFound {
+        String sql = """
+               update T_GS_DISPOSITIVO_MEDICAO d set d.status = ? where d.id_dispositivo = ?
+               """;
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, StatusDispositvo.INATIVO.toString());
+            ps.setLong(2, id);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DispositivoNotFound("dispositivo não encontrado");
+            }
+        }
     }
 }
