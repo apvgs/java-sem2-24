@@ -23,7 +23,6 @@ final class LeituraEnergiaServiceImpl implements LeituraEnergiaService {
 
     @Override
     public void inserir(LeituraEnergia leituraEnergia) throws SQLException, ErroAoCriarLogin, CpfInvalido, ConsumoNotFound {
-        leituraEnergia.setDataMedicao(leituraEnergia.getDataMedicao().minusDays(5));
         ConsumoDiario consumoDiario = consumoDiarioService.buscarPorId(leituraEnergia.getDispositivoMedicao().getUsuario().getId(),
                 leituraEnergia.getDataMedicao().toLocalDate());
         Connection connection = DatabaseConnectionFactory.getConnection();
