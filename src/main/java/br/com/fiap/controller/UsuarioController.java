@@ -39,7 +39,7 @@ public class UsuarioController {
     public Response cadastrarUsuario(CadastroUsuarioDto dto) {
         try {
             Login login = new Login(dto.email(), dto.password());
-            Usuario usuario = new Usuario(dto.cpf(), dto.nome(), login);
+            Usuario usuario = new Usuario(dto.cpf(), dto.name(), login);
             usuarioService.cadastrarUsuario(usuario);
             URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(usuario.getId())).build();
             return Response.created(uri).entity(dto).build();
@@ -58,7 +58,6 @@ public class UsuarioController {
     public Response dashBoard(@CookieParam(CookieName.TOKEN) String token) {
         try {
             String email = tokenService.getSubject(token);
-            System.out.println(email);
             DashBoardDto dashboard = usuarioService.dashBoard(email);
             return Response.ok().entity(dashboard).build();
         } catch (SQLException e) {
@@ -74,18 +73,21 @@ public class UsuarioController {
     @Path("add_dispositivo")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addDispositivo(DispositivoDto dto){
+    public Response addDispositivo(@CookieParam(CookieName.TOKEN) String token, DispositivoDto dto){
         try {
-            Endereco endereco = enderecoService.buscarEndereco(dto.enderecoId());
-            DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.nome(), dto.localizacao(), endereco);
+            String email = tokenService.getSubject(token);
+            Usuario usuario = usuarioService.buscarUsuario(email);
+            DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.nome(), dto.localizacao(), usuario);
             dispositivoMedicaoService.cadastrar(dispositivoMedicao);
             return Response.status(Response.Status.CREATED).entity(
-                    new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getEndereco().getApelido()))
+                    new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome()))
                     .build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
-        } catch (ErroAoCriarLogin | CpfInvalido | EnderecoNotFound e) {
+        } catch (ErroAoCriarLogin | CpfInvalido | EnderecoNotFound | UsuarioNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
+        } catch (LoginNotFound e) {
+           return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("error", e.getMessage())).build();
         }
     }
 
