@@ -4,6 +4,7 @@ import br.com.fiap.dto.LeituraEnergiaDto;
 import br.com.fiap.dto.LeituraEnergiaResponse;
 import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
+import br.com.fiap.exception.DispositivoNotFound;
 import br.com.fiap.exception.ErroAoCriarLogin;
 import br.com.fiap.model.DispositivoMedicao;
 import br.com.fiap.model.LeituraEnergia;
@@ -48,7 +49,7 @@ public class LeituraEnergiaController {
             return Response.ok(response).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
-        } catch (ErroAoCriarLogin | CpfInvalido e) {
+        } catch (ErroAoCriarLogin | CpfInvalido | DispositivoNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
         } catch (ConsumoNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", "consumo não encontrado")).build();
