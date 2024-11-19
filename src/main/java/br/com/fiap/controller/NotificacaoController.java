@@ -11,10 +11,13 @@ import br.com.fiap.service.*;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Path("notificacao")
 public class NotificacaoController {
@@ -24,6 +27,7 @@ public class NotificacaoController {
     private TokenService tokenService = TokenServiceFactory.create();
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getNotificacao(@CookieParam(CookieName.TOKEN) String token) {
         try {
             String email = tokenService.getSubject(token);
@@ -34,9 +38,9 @@ public class NotificacaoController {
                     .toList();
             return Response.ok(notificacao).build();
         } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error",e.getMessage())).build();
         } catch (ErroAoCriarLogin | CpfInvalido | LoginNotFound e) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("error", e.getMessage())).build();
         }
     }
 }
