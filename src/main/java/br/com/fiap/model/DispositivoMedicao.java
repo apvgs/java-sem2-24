@@ -6,13 +6,13 @@ public class DispositivoMedicao {
     private String nome;
     private StatusDispositvo status;
     private String localizacao;
-    private Endereco endereco;
+    private Usuario usuario;
 
-    public DispositivoMedicao(String nome, String localizacao, Endereco endereco) {
+    public DispositivoMedicao(String nome, String localizacao, Usuario usuario) {
         this.nome = nome;
         this.status = StatusDispositvo.ATIVO;
         this.localizacao = localizacao;
-        this.endereco = endereco;
+        this.usuario = usuario;
     }
 
     public void ativarDispositivo() {
@@ -43,12 +43,12 @@ public class DispositivoMedicao {
         this.localizacao = localizacao;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Long getId() {

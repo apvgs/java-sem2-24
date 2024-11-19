@@ -23,20 +23,22 @@ final class LeituraEnergiaServiceImpl implements LeituraEnergiaService {
 
     @Override
     public void inserir(LeituraEnergia leituraEnergia) throws SQLException, ErroAoCriarLogin, CpfInvalido, ConsumoNotFound {
-        ConsumoDiario consumoDiario = consumoDiarioService.buscarPorId(leituraEnergia.getDispositivoMedicao().getEndereco().getUsuario().getId(),
+        leituraEnergia.setDataMedicao(leituraEnergia.getDataMedicao().minusDays(5));
+        ConsumoDiario consumoDiario = consumoDiarioService.buscarPorId(leituraEnergia.getDispositivoMedicao().getUsuario().getId(),
                 leituraEnergia.getDataMedicao().toLocalDate());
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             leituraEnergiaDao.inserir(connection, leituraEnergia);
             if (consumoDiario == null){
                 consumoDiario = new ConsumoDiario();
-                consumoDiario.setEndereco(leituraEnergia.getDispositivoMedicao().getEndereco());
+                consumoDiario.setUsuario(leituraEnergia.getDispositivoMedicao().getUsuario());
                 consumoDiario.setDate(leituraEnergia.getDataMedicao().toLocalDate());
                 consumoDiario.setConsumoDiario(leituraEnergia.getConsumo());
                 consumoDiarioService.cadastrar(connection, consumoDiario);
+            } else {
+                consumoDiario.setConsumoDiario(consumoDiario.getConsumoDiario() + leituraEnergia.getConsumo());
+                consumoDiarioService.alterar(connection, consumoDiario);
             }
-            consumoDiario.setConsumoDiario(consumoDiario.getConsumoDiario() + leituraEnergia.getConsumo());
-            consumoDiarioService.alterar(connection, consumoDiario);
             if (leituraEnergia.getConsumo() > 700){
                 Notificacao notificacao = new Notificacao("Alerta Houve um pico de energia!!!!", leituraEnergia);
                 notificacaoService.inserir(connection, notificacao);

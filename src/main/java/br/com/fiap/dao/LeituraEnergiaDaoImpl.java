@@ -33,10 +33,9 @@ final class LeituraEnergiaDaoImpl implements LeituraEnergiaDao {
     @Override
     public LeituraEnergia buscar(Connection connection, Long id) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-               select l.*, d.*, e.*, usuario.*, login.* from T_GS_LEITURA_ENERGIA l
+               select l.*, d.*, usuario.*, login.* from T_GS_LEITURA_ENERGIA l
                 join T_GS_DISPOSITIVO_MEDICAO d on (d.id_dispositivo = l.dispositivo_id)
-                join T_GS_ENDERECO e on (e.id_endereco = d.endereco_id)
-                join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
+                join T_GS_USUARIO usuario on usuario.id_usuario = d.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
                 where l.id_leitura = ?
                """;
@@ -55,10 +54,9 @@ final class LeituraEnergiaDaoImpl implements LeituraEnergiaDao {
     @Override
     public List<LeituraEnergia> listar(Connection connection, Long usuarioId, LocalDate data) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-               select l.*, d.*, e.*, usuario.*, login.* from T_GS_LEITURA_ENERGIA l
+               select l.*, d.*, usuario.*, login.* from T_GS_LEITURA_ENERGIA l
                 join T_GS_DISPOSITIVO_MEDICAO d on (d.id_dispositivo = l.dispositivo_id)
-                join T_GS_ENDERECO e on (e.id_endereco = d.endereco_id)
-                join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
+                join T_GS_USUARIO usuario on usuario.id_usuario = d.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
                 where usuario.id_usuario = ? and trunc(dt_medicao) = ?
                """;

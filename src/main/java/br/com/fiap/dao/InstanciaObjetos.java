@@ -44,12 +44,12 @@ final class InstanciaObjetos {
         consumoDiario.setId(rs.getLong("id_consumo"));
         consumoDiario.setDate(rs.getDate("data").toLocalDate());
         consumoDiario.setConsumoDiario(rs.getDouble("consumo_diario"));
-        consumoDiario.setEndereco(instanciaEndereco(rs));
+        consumoDiario.setUsuario(instanciaUsuario(rs));
         return consumoDiario;
     }
 
     public static DispositivoMedicao instanciaDispositivoMedicao(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
-        DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(rs.getString("nome"), rs.getString("localizacao"), instanciaEndereco(rs));
+        DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(rs.getString("nome"), rs.getString("localizacao"), instanciaUsuario(rs));
         dispositivoMedicao.setId(rs.getLong("id_dispositivo"));
         return dispositivoMedicao;
     }

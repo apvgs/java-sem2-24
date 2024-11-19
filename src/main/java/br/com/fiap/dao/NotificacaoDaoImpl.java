@@ -32,11 +32,10 @@ final class NotificacaoDaoImpl implements NotificacaoDao {
     @Override
     public List<Notificacao> buscar(Connection connection, Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
         String sql = """
-               select n.*, l.*, d.*, e.* usuario.*, login.* from T_GS_NOTIFICACAO n 
+               select n.*, l.*, d.*, usuario.*, login.* from T_GS_NOTIFICACAO n 
                 join T_GS_LEITURA_ENERGIA l
                 join T_GS_DISPOSITIVO_MEDICAO d on (d.id_dispositivo_medicao = l.dipositivo_id)
-                join T_GS_ENDERECO e on (e.id_endereco = d.endereco_id)
-                join T_GS_USUARIO usuario on usuario.id_usuario = e.usuario_id
+                join T_GS_USUARIO usuario on usuario.id_usuario = d.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
                 where id_usuario = ?
                """;

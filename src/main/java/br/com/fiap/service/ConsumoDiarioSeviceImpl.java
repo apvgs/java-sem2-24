@@ -37,6 +37,15 @@ final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
     }
 
     @Override
+    public List<ConsumoDiario> buscarConsumoDiarioByUsuarioIdEMes(Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+        try(Connection connection = DatabaseConnectionFactory.getConnection()) {
+            int mes = LocalDate.now().getMonthValue();
+            int ano = LocalDate.now().getYear();
+            return consumoDiarioDao.buscarConsumoDiarioByUsuarioIdEMes(connection, usuarioId, mes, ano);
+        }
+    }
+
+    @Override
     public void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound {
         consumoDiarioDao.alterar(connection, consumoDiario);
     }

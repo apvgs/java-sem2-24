@@ -7,12 +7,12 @@ public class ConsumoDiario {
     private Long id;
     private Double consumoDiario;
     private LocalDate date;
-    private Endereco endereco;
+    private Usuario usuario;
 
-    public ConsumoDiario(Double consumoDiario, LocalDate date, Endereco endereco) {
+    public ConsumoDiario(Double consumoDiario, LocalDate date, Usuario usuario) {
         this.consumoDiario = consumoDiario;
         this.date = date;
-        this.endereco = endereco;
+        this.usuario = usuario;
     }
 
     public ConsumoDiario() {
@@ -42,11 +42,11 @@ public class ConsumoDiario {
         this.date = date;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
