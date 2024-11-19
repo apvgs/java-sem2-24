@@ -26,6 +26,7 @@ public class DispositivoMedicaoController {
 
 
     @GET
+    @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllConsumo(@CookieParam(CookieName.TOKEN) String token) {
         try {
