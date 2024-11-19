@@ -80,7 +80,7 @@ public class UsuarioController {
             DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.codigo(), dto.localizacao(), usuario);
             dispositivoMedicaoService.cadastrar(dispositivoMedicao);
             return Response.status(Response.Status.CREATED).entity(
-                    new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome()))
+                    new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome(), dispositivoMedicao.getCodigo()))
                     .build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();

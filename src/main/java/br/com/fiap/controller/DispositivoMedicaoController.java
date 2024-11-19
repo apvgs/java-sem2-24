@@ -34,7 +34,7 @@ public class DispositivoMedicaoController {
             Usuario usuario = usuarioService.buscarUsuario(email);
             List<DispoitivoRequestDto> dispositivoMedicoes = dispositivoMedicaoService.buscarByUsuarioId(usuario.getId())
                     .stream()
-                    .map(dispositivo -> new DispoitivoRequestDto(dispositivo.getId(), dispositivo.getLocalizacao(), dispositivo.getUsuario().getNome()))
+                    .map(dispositivo -> new DispoitivoRequestDto(dispositivo.getId(), dispositivo.getLocalizacao(), dispositivo.getUsuario().getNome(), dispositivo.getCodigo()))
                     .toList();
             return Response.ok(dispositivoMedicoes).build();
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class DispositivoMedicaoController {
     public Response getConsumoById(@PathParam("id") Long id) {
         try {
             DispositivoMedicao dispositivoMedicoes = dispositivoMedicaoService.buscarPorId(id);
-            return Response.ok(new DispoitivoRequestDto(dispositivoMedicoes.getId(), dispositivoMedicoes.getLocalizacao(), dispositivoMedicoes.getUsuario().getNome())).build();
+            return Response.ok(new DispoitivoRequestDto(dispositivoMedicoes.getId(), dispositivoMedicoes.getLocalizacao(), dispositivoMedicoes.getUsuario().getNome(), dispositivoMedicoes.getCodigo())).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (ErroAoCriarLogin | CpfInvalido e) {
@@ -70,7 +70,7 @@ public class DispositivoMedicaoController {
         try {
             dispositivoMedicaoService.alterarDispositivo(request.localizacao(), id);
             DispositivoMedicao dispositivoMedicao = dispositivoMedicaoService.buscarPorId(id);
-            return Response.ok(new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome())).build();
+            return Response.ok(new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome(), dispositivoMedicao.getCodigo())).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
         } catch (DispositivoNotFound e) {
