@@ -3,13 +3,13 @@ package br.com.fiap.model;
 public class DispositivoMedicao {
 
     private Long id;
-    private String nome;
+    private String codigo;
     private StatusDispositvo status;
     private String localizacao;
     private Usuario usuario;
 
-    public DispositivoMedicao(String nome, String localizacao, Usuario usuario) {
-        this.nome = nome;
+    public DispositivoMedicao(String codigo, String localizacao, Usuario usuario) {
+        this.codigo = codigo;
         this.status = StatusDispositvo.ATIVO;
         this.localizacao = localizacao;
         this.usuario = usuario;
@@ -23,12 +23,12 @@ public class DispositivoMedicao {
         this.status = StatusDispositvo.INATIVO;
     }
 
-    public String getNome() {
-        return nome;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public StatusDispositvo getStatus() {

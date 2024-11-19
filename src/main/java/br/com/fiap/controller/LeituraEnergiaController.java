@@ -44,7 +44,7 @@ public class LeituraEnergiaController {
             LeituraEnergiaResponse response = new LeituraEnergiaResponse(leituraEnergia.getId(),
                     leituraEnergia.getDataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     leituraEnergia.getConsumo(),
-                    leituraEnergia.getDispositivoMedicao().getNome());
+                    leituraEnergia.getDispositivoMedicao().getCodigo());
             return Response.ok(response).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();

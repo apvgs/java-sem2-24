@@ -70,7 +70,7 @@ final class UsuarioServiceImpl implements UsuarioService {
                 .map(leituraEnergia -> new LeituraEnergiaResponse(leituraEnergia.getId(),
                         leituraEnergia.getDataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy:HH:mm:ss")),
                         leituraEnergia.getConsumo(),
-                        leituraEnergia.getDispositivoMedicao().getNome()))
+                        leituraEnergia.getDispositivoMedicao().getCodigo()))
                 .toList();
         List<ConsumoDiario> consumoDiarios = consumoDiarioService.buscarConsumoDiarioByUsuarioIdEMes(usuario.getId());
         double consumoMensal = 0;

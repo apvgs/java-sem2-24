@@ -77,7 +77,7 @@ public class UsuarioController {
         try {
             String email = tokenService.getSubject(token);
             Usuario usuario = usuarioService.buscarUsuario(email);
-            DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.nome(), dto.localizacao(), usuario);
+            DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(dto.codigo(), dto.localizacao(), usuario);
             dispositivoMedicaoService.cadastrar(dispositivoMedicao);
             return Response.status(Response.Status.CREATED).entity(
                     new DispoitivoRequestDto(dispositivoMedicao.getId(), dispositivoMedicao.getLocalizacao(), dispositivoMedicao.getUsuario().getNome()))

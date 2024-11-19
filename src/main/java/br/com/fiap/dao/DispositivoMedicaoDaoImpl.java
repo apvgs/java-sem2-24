@@ -21,7 +21,7 @@ final class DispositivoMedicaoDaoImpl implements DispositivoMedicaoDao {
                 """;
 
         try(PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id_dispositivo"})) {
-            ps.setString(1, dispositivoMedicao.getNome());
+            ps.setString(1, dispositivoMedicao.getCodigo());
             ps.setString(2, dispositivoMedicao.getStatus().toString());
             ps.setString(3, dispositivoMedicao.getLocalizacao());
             ps.setLong(4, dispositivoMedicao.getUsuario().getId());

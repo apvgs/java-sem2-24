@@ -1,7 +1,7 @@
 package br.com.fiap.dto;
 
 public record DispositivoDto(
-        String nome,
+        String codigo,
         String localizacao
 ) {
 }
