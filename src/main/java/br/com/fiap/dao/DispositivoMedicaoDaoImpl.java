@@ -62,11 +62,12 @@ final class DispositivoMedicaoDaoImpl implements DispositivoMedicaoDao {
                select d.*, usuario.*, login.* from T_GS_DISPOSITIVO_MEDICAO d
                 join T_GS_USUARIO usuario on usuario.id_usuario = d.usuario_id
                 join T_GS_LOGIN login on login.id_login = usuario.login_id
-                where d.usuario_id = ?
+                where d.usuario_id = ? and d.status = ?
                """;
         List<DispositivoMedicao> dispositivoMedicao = new ArrayList<>();
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, userId);
+            ps.setString(2, StatusDispositvo.ATIVO.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     dispositivoMedicao.add(InstanciaObjetos.instanciaDispositivoMedicao(rs));
