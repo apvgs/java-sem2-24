@@ -82,6 +82,7 @@ final class ConsumoDiarioDaoImpl implements ConsumoDiarioDao{
             where usuario.id_usuario = ?
             and EXTRACT(MONTH FROM c.data) = ?
             and EXTRACT(YEAR FROM c.data) = ?
+            order by c.data asc
             """;
         List<ConsumoDiario> lista = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
