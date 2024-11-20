@@ -28,7 +28,7 @@ public class DispositivoMedicaoController {
     @GET
     @Path("")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllConsumo(@CookieParam(CookieName.TOKEN) String token) {
+    public Response getAllDispositivos(@CookieParam(CookieName.TOKEN) String token) {
         try {
             String email = tokenService.getSubject(token);
             Usuario usuario = usuarioService.buscarUsuario(email);
@@ -49,7 +49,7 @@ public class DispositivoMedicaoController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getConsumoById(@PathParam("id") Long id) {
+    public Response getDispositivoById(@PathParam("id") Long id) {
         try {
             DispositivoMedicao dispositivoMedicoes = dispositivoMedicaoService.buscarPorId(id);
             return Response.ok(new DispoitivoRequestDto(dispositivoMedicoes.getId(), dispositivoMedicoes.getLocalizacao(), dispositivoMedicoes.getUsuario().getNome(), dispositivoMedicoes.getCodigo())).build();
