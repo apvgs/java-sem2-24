@@ -2,26 +2,21 @@ package br.com.fiap.controller;
 
 import br.com.fiap.dto.LeituraEnergiaDto;
 import br.com.fiap.dto.LeituraEnergiaResponse;
-import br.com.fiap.exception.ConsumoNotFound;
-import br.com.fiap.exception.CpfInvalido;
-import br.com.fiap.exception.DispositivoNotFound;
-import br.com.fiap.exception.ErroAoCriarLogin;
+import br.com.fiap.exception.*;
 import br.com.fiap.model.DispositivoMedicao;
 import br.com.fiap.model.LeituraEnergia;
-import br.com.fiap.service.DispositivoMedicaoService;
-import br.com.fiap.service.DispositivoMedicaoServiceFactory;
-import br.com.fiap.service.LeituraEnergiaService;
-import br.com.fiap.service.LeituraEnergiaServiceFactory;
+import br.com.fiap.model.Usuario;
+import br.com.fiap.security.CookieName;
+import br.com.fiap.service.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Path("leituraEnergia")
@@ -29,6 +24,8 @@ public class LeituraEnergiaController {
 
     private LeituraEnergiaService leituraEnergiaService = LeituraEnergiaServiceFactory.create();
     private DispositivoMedicaoService dispositivoMedicaoService = DispositivoMedicaoServiceFactory.create();
+    private UsuarioService usuarioService = UsuarioServiceFactory.create();
+    private TokenService tokenService = TokenServiceFactory.create();
 
     @POST
     @Path("")
@@ -53,6 +50,31 @@ public class LeituraEnergiaController {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
         } catch (ConsumoNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", "consumo não encontrado")).build();
+        }
+    }
+
+    @GET
+    @Path("")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listarLeituraEnergia(@QueryParam("data") String data, @CookieParam(CookieName.TOKEN) String token) {
+        try {
+            LocalDate localDate = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String email = tokenService.getSubject(token);
+            Usuario usuario = usuarioService.buscarUsuario(email);
+            List<LeituraEnergiaResponse> listar = leituraEnergiaService.listar(usuario.getId(), localDate)
+                    .stream()
+                    .map(x -> new LeituraEnergiaResponse(x.getId(),
+                            x.getDataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            x.getConsumo(),
+                            x.getDispositivoMedicao().getCodigo()))
+                    .toList();
+            return Response.ok(listar).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("error", e.getMessage())).build();
+        } catch (ErroAoCriarLogin | CpfInvalido e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", e.getMessage())).build();
+        } catch (LoginNotFound e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("error", e.getMessage())).build();
         }
     }
 
