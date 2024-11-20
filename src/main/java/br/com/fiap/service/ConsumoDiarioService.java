@@ -1,5 +1,6 @@
 package br.com.fiap.service;
 
+import br.com.fiap.dto.ConsumoMesDto;
 import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
@@ -22,4 +23,6 @@ public interface ConsumoDiarioService {
     List<ConsumoDiario> buscarConsumoDiarioByUsuarioIdEMes(Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 
     void alterar(Connection connection, ConsumoDiario consumoDiario) throws SQLException, ConsumoNotFound;
+
+    ConsumoMesDto getConsumoMes(Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido;
 }

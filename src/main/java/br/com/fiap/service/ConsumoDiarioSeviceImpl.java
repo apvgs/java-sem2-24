@@ -3,6 +3,8 @@ package br.com.fiap.service;
 import br.com.fiap.config.DatabaseConnectionFactory;
 import br.com.fiap.dao.ConsumoDiarioDao;
 import br.com.fiap.dao.ConsumoDiarioDaoFactory;
+import br.com.fiap.dto.ConsumoDiarioDto;
+import br.com.fiap.dto.ConsumoMesDto;
 import br.com.fiap.exception.ConsumoNotFound;
 import br.com.fiap.exception.CpfInvalido;
 import br.com.fiap.exception.ErroAoCriarLogin;
@@ -11,6 +13,7 @@ import br.com.fiap.model.ConsumoDiario;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
@@ -43,6 +46,18 @@ final class ConsumoDiarioSeviceImpl implements ConsumoDiarioService{
             int ano = LocalDate.now().getYear();
             return consumoDiarioDao.buscarConsumoDiarioByUsuarioIdEMes(connection, usuarioId, mes, ano);
         }
+    }
+
+    @Override
+    public ConsumoMesDto getConsumoMes(Long usuarioId) throws SQLException, ErroAoCriarLogin, CpfInvalido {
+        List<ConsumoDiario> consumoDiarios = buscarConsumoDiarioByUsuarioIdEMes(usuarioId);
+        double consumoMes = consumoDiarios.stream().map(ConsumoDiario::getConsumoDiario).reduce(Double::sum).orElse(0.0);
+        List<ConsumoDiarioDto> consumoDiarioDtos = consumoDiarios
+                .stream()
+                .map(consumoDiario ->
+                        new ConsumoDiarioDto(consumoDiario.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), consumoDiario.getConsumoDiario()))
+                .toList();
+        return new ConsumoMesDto(consumoDiarioDtos, consumoMes);
     }
 
     @Override
