@@ -38,7 +38,7 @@ final class LeituraEnergiaServiceImpl implements LeituraEnergiaService {
                 consumoDiario.setConsumoDiario(consumoDiario.getConsumoDiario() + leituraEnergia.getConsumo());
                 consumoDiarioService.alterar(connection, consumoDiario);
             }
-            if (leituraEnergia.getConsumo() > 700){
+            if (leituraEnergia.getConsumo() > 2.5){
                 Notificacao notificacao = new Notificacao("Alerta Houve um pico de energia!!!!", leituraEnergia);
                 notificacaoService.inserir(connection, notificacao);
             }
