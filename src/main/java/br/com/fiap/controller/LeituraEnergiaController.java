@@ -64,7 +64,7 @@ public class LeituraEnergiaController {
             List<LeituraEnergiaResponse> listar = leituraEnergiaService.listar(usuario.getId(), localDate)
                     .stream()
                     .map(x -> new LeituraEnergiaResponse(x.getId(),
-                            x.getDataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            x.getDataMedicao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy:HH:mm:ss")),
                             x.getConsumo(),
                             x.getDispositivoMedicao().getCodigo()))
                     .toList();
