@@ -18,7 +18,7 @@ final class DispositivoMedicaoDaoImpl implements DispositivoMedicaoDao {
     @Override
     public void inserir(Connection connection, DispositivoMedicao dispositivoMedicao) throws SQLException {
         String sql = """
-                insert into T_GS_DISPOSITIVO_MEDICAO(nome, status, localizacao, usuario_id)
+                insert into T_GS_DISPOSITIVO_MEDICAO(codigo, status, localizacao, usuario_id)
                 values (?, ?, ?, ?)
                 """;
 

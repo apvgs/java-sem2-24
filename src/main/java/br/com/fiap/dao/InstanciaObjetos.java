@@ -49,7 +49,7 @@ final class InstanciaObjetos {
     }
 
     public static DispositivoMedicao instanciaDispositivoMedicao(ResultSet rs) throws SQLException, CpfInvalido, ErroAoCriarLogin {
-        DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(rs.getString("nome"), rs.getString("localizacao"), instanciaUsuario(rs));
+        DispositivoMedicao dispositivoMedicao = new DispositivoMedicao(rs.getString("codigo"), rs.getString("localizacao"), instanciaUsuario(rs));
         dispositivoMedicao.setId(rs.getLong("id_dispositivo"));
         return dispositivoMedicao;
     }
