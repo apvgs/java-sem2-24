@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-@Path("leituraEnergia")
+@Path("leitura_energia")
 public class LeituraEnergiaController {
 
     private LeituraEnergiaService leituraEnergiaService = LeituraEnergiaServiceFactory.create();
